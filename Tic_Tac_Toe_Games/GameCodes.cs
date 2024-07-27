@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Numerics;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 
 
 namespace Tic_Tac_Toe_Games
@@ -23,6 +15,10 @@ namespace Tic_Tac_Toe_Games
         private const char EMPTY_SYMBOL = ' ';
         private static char firstSymbol;
         private static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
+        private static Random random = new Random();
+        private static int rows;
+        private static int columns;
+        private static int winner;
 
 
         public static void ResetGrid()
@@ -31,7 +27,7 @@ namespace Tic_Tac_Toe_Games
             {
                 for (int rows = 0; rows < GRID_SIZE; rows++)
                 {
-                    grid[column, rows] = ' ';
+                    grid[column, rows] = EMPTY_SYMBOL;
                 }
             }
         }
@@ -43,86 +39,175 @@ namespace Tic_Tac_Toe_Games
 
         public static void DisplayGrid()
         {
-            for (int column =0; column < GRID_SIZE-1; column++)
+            for (rows = 0; rows < GRID_SIZE; rows++)
             {
-                for (int rows = 0; rows < GRID_SIZE; rows++)
+                for (columns = 0; columns < GRID_SIZE; columns++)
                 {
-                    Console.Write(grid[column, rows]);
-                    if (rows < GRID_SIZE -1 ) Console.Write("   | ");
+                    Console.Write(grid[rows, columns]);
+                    if (columns < GRID_SIZE - 1) Console.Write("  |");
                 }
                 Console.WriteLine();
-                if (column < GRID_SIZE -1 ) Console.WriteLine( " ----------- " );
+                if (rows < GRID_SIZE - 1) Console.WriteLine(" ----------- ");
             }
         }
+        public static void ATMove()
+        {
+            while (true)
+            {
+                rows = random.Next(GRID_SIZE);
+                columns = random.Next(GRID_SIZE);
+                if (grid[rows, columns] == EMPTY_SYMBOL)
+                {
+                    grid[rows, columns] = AiSymbol;
+                    break;
+                }
+            }
+        }
+
         public static Players CheckWinner()
         {
-            int winner;
-            for (winner = 1;winner < GRID_SIZE;winner++)
+
+            for (winner = 0; winner < GRID_SIZE; winner++)
             {
-                if (IsColumnWinning(winner))
+                if (IsRowsWinning(winner))
                 {
                     return (grid[winner, 0] == userSymbol) ? Players.User : Players.AI;
                 }
-                if (IsRowsWinning(winner))
+                if (IsColumnWinning(winner))
                 {
-                    return (grid[0,winner] == userSymbol) ? Players.User :Players.AI;
+                    return (grid[0, winner] == userSymbol) ? Players.User : Players.AI;
                 }
-                
+            }
+            if (IsDiagonalWinning())
+            {
+                return (grid[0, 0] == userSymbol) ? Players.User : Players.AI;
+            }
+            if (IsRichtDiagonalWinning())
+            {
+
+                return (grid[0, GRID_SIZE - 1] == userSymbol) ? Players.User : Players.AI;
+
             }
 
+            return Players.None;
         }
+    
+
+        
 
         public static bool IsRowsWinning(int rows)
         {
-         
-            int column;
+
+
             firstSymbol = grid[rows, 0];
             if (firstSymbol == EMPTY_SYMBOL)
             {
                 return false;
             }
-            for (column = 1; column < GRID_SIZE; column++)
+            for (columns = 1; columns < GRID_SIZE; columns++)
             {
-                if (firstSymbol != grid[rows, column])
+                if (grid[rows, columns] != firstSymbol)
                 {
-                    return false;
+                        return false;
+                    
                 }
             }
             return true;
-
         }
+
+
+
         public static bool IsColumnWinning(int column)
         {
-             firstSymbol = grid[0, column];
+            firstSymbol = grid[0, column];
 
             if (firstSymbol == EMPTY_SYMBOL)
             {
                 return false;
             }
-
-            for (int rows = 1; rows < GRID_SIZE; rows++)
+            for (rows=1;rows<GRID_SIZE;rows++)
             {
                 if (grid[rows, column] != firstSymbol)
                 {
+                    return false;
+                } 
+
+            }
+
+            return true;
+        }
+
+        public static bool IsDiagonalWinning()
+        {
+            firstSymbol = grid[0, 0];
+            if (firstSymbol == EMPTY_SYMBOL)
+            {
+                return false;
+            }
+
+            for (int i = 1; i < GRID_SIZE; i++)
+
+            {
+                if (grid[i, i] != firstSymbol)
+                {
+
                     return false;
                 }
             }
             return true;
         }
-        public static bool IsDiagonalWinning()
+
+        public static bool IsRichtDiagonalWinning()
         {
-            firstSymbol = grid[0,0];
-            if (firstSymbol != EMPTY_SYMBOL)
+            firstSymbol = grid[0, GRID_SIZE - 1];
+            if (firstSymbol == EMPTY_SYMBOL)
+            {
+                return false;
+            }
+            for (int i = 1; i < GRID_SIZE; i++)
+            {
+                if (grid[i, GRID_SIZE - 1 - i] != firstSymbol)
                 {
+                    return false;
+                }
 
             }
+            return true;
         }
+        public static bool IsGridFull()
+        {
+            foreach (char cell in grid)
+            {
+                if (cell == EMPTY_SYMBOL)
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+        public static void PlayerMove()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter your move (rows and columns): ");
+
+                rows = int.Parse(Console.ReadLine());
+                columns = int.Parse(Console.ReadLine());
+                if (rows >= 0 && rows < GRID_SIZE && columns >= 0 && columns < GRID_SIZE && grid[rows, columns] == EMPTY_SYMBOL)
+                {
+                    grid[rows, columns] = userSymbol;
+                    break;
+
+
+                    Console.WriteLine("Invalid move. Try again.");
+                }
+            }
+        }
+
+
     }
 
-        }
-       
 
-
-    }
 }
 
