@@ -106,10 +106,12 @@ namespace Tic_Tac_Toe_Games
             }
             for (columns = 1; columns < GRID_SIZE; columns++)
             {
-                if (grid[rows, columns] != firstSymbol)
+                if (grid[rows, columns] != EMPTY_SYMBOL)
                 {
+                    {
                         return false;
-                    
+                    }
+
                 }
             }
             return true;
@@ -125,15 +127,14 @@ namespace Tic_Tac_Toe_Games
             {
                 return false;
             }
-            for (rows=1;rows<GRID_SIZE;rows++)
+
+            for (int rows = 1; rows < GRID_SIZE; rows++)
             {
                 if (grid[rows, column] != firstSymbol)
                 {
                     return false;
-                } 
-
+                }
             }
-
             return true;
         }
 
@@ -153,6 +154,7 @@ namespace Tic_Tac_Toe_Games
 
                     return false;
                 }
+
             }
             return true;
         }
