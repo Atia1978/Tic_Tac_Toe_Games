@@ -1,7 +1,6 @@
 ﻿
 
 
-
 namespace Tic_Tac_Toe_Games
 {
 
@@ -9,9 +8,11 @@ namespace Tic_Tac_Toe_Games
     {
         private const int GRID_SIZE = 3;
         private const int MAX_SIZE = 3;
+        private const char X_PLAYER = 'X';
+        private const char O_PLAYER = 'O';
+        private const int MIN_SIZE = 0;
         private static char userSymbol;
         private static char AiSymbol;
-        private const int MIN_SIZE = 0;
         private const char EMPTY_SYMBOL = ' ';
         private static char firstSymbol;
         private static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
@@ -19,22 +20,26 @@ namespace Tic_Tac_Toe_Games
         private static int rows;
         private static int columns;
         private static int winner;
+        private static int randomIndex;
+        private static List<Cell> availableCells = new List<Cell>();
 
 
         public static void ResetGrid()
         {
+            availableCells.Clear();
             for (int column = 0; column < GRID_SIZE; column++)
             {
                 for (int rows = 0; rows < GRID_SIZE; rows++)
                 {
                     grid[column, rows] = EMPTY_SYMBOL;
+                    availableCells.Add(new Cell(rows, columns));
                 }
             }
         }
         public static void ChosePlayerSymbols(char symbol)
         {
             userSymbol = symbol;
-            AiSymbol = (symbol == 'X') ? 'O' : 'X';
+            AiSymbol = (symbol == X_PLAYER) ? O_PLAYER : X_PLAYER;
         }
 
         public static void DisplayGrid()
@@ -50,18 +55,29 @@ namespace Tic_Tac_Toe_Games
                 if (rows < GRID_SIZE - 1) Console.WriteLine(" ----------- ");
             }
         }
-        public static void ATMove()
+        public static void AIMove()
         {
-            while (true)
+            if (availableCells.Count > 0)
             {
-                rows = random.Next(GRID_SIZE);
-                columns = random.Next(GRID_SIZE);
-                if (grid[rows, columns] == EMPTY_SYMBOL)
-                {
-                    grid[rows, columns] = AiSymbol;
-                    break;
-                }
+                randomIndex = random.Next(availableCells.Count);
+
+                Cell cell = availableCells[randomIndex];
+                rows = cell.Rows;
+                columns = cell.Columns;
+
+                grid[rows, columns] = AiSymbol;
+                availableCells.RemoveAt(randomIndex);
             }
+            //while (true)
+            //{
+            //    rows = random.Next(GRID_SIZE);
+            //    columns = random.Next(GRID_SIZE);
+            //    if (grid[rows, columns] == EMPTY_SYMBOL)
+            //    {
+            //        grid[rows, columns] = AiSymbol;
+            //        break;
+            //    }
+            //}
         }
 
         public static Players CheckWinner()
@@ -72,6 +88,7 @@ namespace Tic_Tac_Toe_Games
                 if (IsRowsWinning(winner))
                 {
                     return (grid[winner, 0] == userSymbol) ? Players.User : Players.AI;
+
                 }
                 if (IsColumnWinning(winner))
                 {
@@ -91,9 +108,6 @@ namespace Tic_Tac_Toe_Games
 
             return Players.None;
         }
-    
-
-        
 
         public static bool IsRowsWinning(int rows)
         {
@@ -116,8 +130,6 @@ namespace Tic_Tac_Toe_Games
             }
             return true;
         }
-
-
 
         public static bool IsColumnWinning(int column)
         {
@@ -178,15 +190,15 @@ namespace Tic_Tac_Toe_Games
         }
         public static bool IsGridFull()
         {
-            foreach (char cell in grid)
-            {
-                if (cell == EMPTY_SYMBOL)
-                {
-                    return false;
-                }
+            //foreach (char cell in grid)
+            //{
+            //    if (cell == EMPTY_SYMBOL)
+            //    {
+            //        return false;
+            //    }
 
-            }
-            return true;
+            //}
+            return availableCells.Count == 0 ;
         }
         public static void PlayerMove()
         {
@@ -196,13 +208,20 @@ namespace Tic_Tac_Toe_Games
 
                 rows = int.Parse(Console.ReadLine());
                 columns = int.Parse(Console.ReadLine());
+
                 if (rows >= 0 && rows < GRID_SIZE && columns >= 0 && columns < GRID_SIZE && grid[rows, columns] == EMPTY_SYMBOL)
                 {
                     grid[rows, columns] = userSymbol;
+
+                    availableCells.Remove(new Cell(rows, columns));
                     break;
 
 
+                }
+                else
+                {
                     Console.WriteLine("Invalid move. Try again.");
+
                 }
             }
         }

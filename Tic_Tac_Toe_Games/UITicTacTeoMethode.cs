@@ -8,6 +8,8 @@ namespace Tic_Tac_Toe_Games
 {
     public  class UITicTacTeoMethode
     {
+        private const char X_PLAYER = 'X';
+        private const char O_PLAYER = 'O';
         public static void StartGame()
         {
             GameCodes.ResetGrid();
@@ -16,7 +18,7 @@ namespace Tic_Tac_Toe_Games
             {
                 Console.WriteLine("Choose your symbol (X or O): ");
                 userSymbol = char.ToUpper(Console.ReadLine()[0]);
-                if (userSymbol == 'X' || userSymbol == 'O')
+                if (userSymbol == X_PLAYER || userSymbol == O_PLAYER)
                 {
                     break;
 
@@ -30,19 +32,6 @@ namespace Tic_Tac_Toe_Games
             {
                 Console.Clear();
                 GameCodes.DisplayGrid();
-
-                if (GameCodes.CheckWinner() != Players.None)
-                {
-                    Console.WriteLine($"Player {GameCodes.CheckWinner()} wins!");
-                    break;
-                }
-
-                if (GameCodes.IsGridFull())
-                {
-                    Console.WriteLine("It's a draw!");
-                    break;
-                }
-
                 GameCodes.PlayerMove();
 
                 if (GameCodes.CheckWinner() != Players.None)
@@ -59,7 +48,7 @@ namespace Tic_Tac_Toe_Games
                     Console.WriteLine("It's a draw!");
                     break;
                 }
-                GameCodes.ATMove();
+                GameCodes.AIMove();
             }
 
         }
