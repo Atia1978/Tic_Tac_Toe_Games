@@ -6,7 +6,7 @@ namespace Tic_Tac_teo_GPT
     {
         static void Main(string[] args)
         {
-          UITicTacTeoMethode.StartGame();
+          UIGame.StartGame();
             
         }
     }

@@ -15,7 +15,7 @@ namespace Tic_Tac_Toe_Games
         private static char AiSymbol;
         private const char EMPTY_SYMBOL = ' ';
         private static char firstSymbol;
-        private static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
+        public static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
         private static Random random = new Random();
         private static int rows;
         private static int columns;
@@ -27,11 +27,11 @@ namespace Tic_Tac_Toe_Games
         public static void ResetGrid()
         {
             availableCells.Clear();
-            for (int column = 0; column < GRID_SIZE; column++)
+            for (rows = 0; rows < GRID_SIZE; rows++)
             {
-                for (int rows = 0; rows < GRID_SIZE; rows++)
+                for (columns = 0; columns < GRID_SIZE; columns++)
                 {
-                    grid[column, rows] = EMPTY_SYMBOL;
+                    grid[rows, columns] = EMPTY_SYMBOL;
                     availableCells.Add(new Cell(rows, columns));
                 }
             }
@@ -42,19 +42,7 @@ namespace Tic_Tac_Toe_Games
             AiSymbol = (symbol == X_PLAYER) ? O_PLAYER : X_PLAYER;
         }
 
-        public static void DisplayGrid()
-        {
-            for (rows = 0; rows < GRID_SIZE; rows++)
-            {
-                for (columns = 0; columns < GRID_SIZE; columns++)
-                {
-                    Console.Write(grid[rows, columns]);
-                    if (columns < GRID_SIZE - 1) Console.Write("  |");
-                }
-                Console.WriteLine();
-                if (rows < GRID_SIZE - 1) Console.WriteLine(" ----------- ");
-            }
-        }
+
         public static void AIMove()
         {
             if (availableCells.Count > 0)
@@ -68,17 +56,18 @@ namespace Tic_Tac_Toe_Games
                 grid[rows, columns] = AiSymbol;
                 availableCells.RemoveAt(randomIndex);
             }
-            //while (true)
-            //{
-            //    rows = random.Next(GRID_SIZE);
-            //    columns = random.Next(GRID_SIZE);
-            //    if (grid[rows, columns] == EMPTY_SYMBOL)
-            //    {
-            //        grid[rows, columns] = AiSymbol;
-            //        break;
-            //    }
-            //}
+
         }
+        public static void PlayerMove()
+        {
+            (int row, int col) = UIGame.GetPlayerMove(GRID_SIZE);
+            if (grid[row, col] == EMPTY_SYMBOL)
+            {
+                grid[row, col] = userSymbol;
+                availableCells.Remove(new Cell(row, col));
+            }
+        }
+
 
         public static Players CheckWinner()
         {
@@ -109,18 +98,18 @@ namespace Tic_Tac_Toe_Games
             return Players.None;
         }
 
-        public static bool IsRowsWinning(int rows)
+        public static bool IsRowsWinning(int row)
         {
 
 
-            firstSymbol = grid[rows, 0];
+            firstSymbol = grid[row, 0];
             if (firstSymbol == EMPTY_SYMBOL)
             {
                 return false;
             }
             for (columns = 1; columns < GRID_SIZE; columns++)
             {
-                if (grid[rows, columns] != EMPTY_SYMBOL)
+                if (grid[row, columns] != firstSymbol)
                 {
                     {
                         return false;
@@ -190,45 +179,16 @@ namespace Tic_Tac_Toe_Games
         }
         public static bool IsGridFull()
         {
-            //foreach (char cell in grid)
-            //{
-            //    if (cell == EMPTY_SYMBOL)
-            //    {
-            //        return false;
-            //    }
 
-            //}
-            return availableCells.Count == 0 ;
+            return availableCells.Count == 0;
         }
-        public static void PlayerMove()
-        {
-            while (true)
-            {
-                Console.WriteLine("Enter your move (rows and columns): ");
-
-                rows = int.Parse(Console.ReadLine());
-                columns = int.Parse(Console.ReadLine());
-
-                if (rows >= 0 && rows < GRID_SIZE && columns >= 0 && columns < GRID_SIZE && grid[rows, columns] == EMPTY_SYMBOL)
-                {
-                    grid[rows, columns] = userSymbol;
-
-                    availableCells.Remove(new Cell(rows, columns));
-                    break;
-
-
-                }
-                else
-                {
-                    Console.WriteLine("Invalid move. Try again.");
-
-                }
-            }
-        }
-
+       
 
     }
 
 
 }
+
+
+
 
