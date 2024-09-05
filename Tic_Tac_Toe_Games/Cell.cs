@@ -8,12 +8,12 @@ namespace Tic_Tac_Toe_Games
 {
     public class Cell
     {
-        public int Rows { get; }
-        public int Columns { get; }
-        public Cell(int row ,int colunms) 
+        public int Row { get; }
+        public int Col { get; }
+        public Cell(int row ,int col) 
         {
-            Rows = row; 
-            Columns = colunms;
+            Row = row; 
+            Col = col;
         }
 
     }
