@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Tic_Tac_Toe_Games
 {
@@ -11,81 +8,45 @@ namespace Tic_Tac_Toe_Games
     {
         private const char X_PLAYER = 'X';
         private const char O_PLAYER = 'O';
+        private const int GRID_SIZE = 3;
+        private static int rows;
+        private static int columns;
         private static char userSymbol;
-        public static void StartGame()
+        
+      
+        public static char ChooseSymbol()
         {
-            GameCodes.ResetGrid();
             while (true)
             {
-                Console.WriteLine("Choose your symbol (X or O): ");
+                Console.WriteLine($"Choose your symbol {X_PLAYER} OR {O_PLAYER} : ");
                 userSymbol = char.ToUpper(Console.ReadLine()[0]);
                 if (userSymbol == X_PLAYER || userSymbol == O_PLAYER)
                 {
-                    break;
+                    return userSymbol;
 
                 }
-                Console.WriteLine("Invalid symbol. Please choose X or O.");
+                Console.WriteLine($"Invalid symbol. Please choose {X_PLAYER} OR {O_PLAYER}");
             }
-
-            GameCodes.ChosePlayerSymbols(userSymbol);
-
-            while (true)
-            {
-                DisplayGrid(GameCodes.grid);
-                GameCodes.PlayerMove();
-                GameCodes.AIMove();
-
-                Players winner = GameCodes.CheckWinner();
-                if (winner != Players.None)
-                {
-                    DisplayGrid(GameCodes.grid);
-                    Console.WriteLine($"{winner} wins!");
-                    break;
-                }
-
-                if (GameCodes.IsGridFull())
-                {
-                    DisplayGrid(GameCodes.grid);
-                    Console.WriteLine("It's a draw!");
-                    break;
-                }
-            }
+            
         }
-        
-        public static void DisplayGrid(char[,] grid)
-        {
-            int gridSize = grid.GetLength(0);
-            for (int row = 0; row < gridSize; row++)
+            public static void DisplayGrid(char[,] grid)
             {
-                for (int col = 0; col < gridSize; col++)
+                int gridSize = grid.GetLength(0);
+                for (int row = 0; row < gridSize; row++)
                 {
-                    Console.Write(grid[row, col]);
-                    if (col < gridSize - 1) Console.Write("  |");
-                }
-                Console.WriteLine();
-                if (row < gridSize - 1) Console.WriteLine(" ----------- ");
-            }
-        }
-
-        public static (int row, int col) GetPlayerMove(int gridSize)
-        {
-            while (true)
-            {
-                Console.WriteLine("Enter your move (row and column): ");
-                int row = int.Parse(Console.ReadLine());
-                int col = int.Parse(Console.ReadLine());
-
-                if (row >= 0 && row < gridSize && col >= 0 && col < gridSize)
-                {
-                    return (row, col);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid move. Try again.");
+                    for (int col = 0; col < gridSize; col++)
+                    {
+                        Console.Write(grid[row, col]);
+                        if (col < gridSize - 1) Console.Write("  |");
+                    }
+                    Console.WriteLine();
+                    if (row < gridSize - 1) Console.WriteLine(" ----------- ");
                 }
             }
 
-        }
+
+       
     }
+
 }
 
