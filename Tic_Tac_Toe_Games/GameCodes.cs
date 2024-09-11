@@ -69,13 +69,11 @@ namespace Tic_Tac_Toe_Games
         }
         public static Cell GetPlayerMove(int gridSize)
         {
-           Console.WriteLine(" Pleas Enter the  Row and Colunm like ---> ('1,2') ");
+            Console.WriteLine($" Please ُEnter Row and Colunm like ---> ('Row,Colunm') ");
             while (true)
             {
                 string input = Console.ReadLine();
-
                 string[] parts = input.Split(',');
-
                 if (parts.Length == 2 &&
                 int.TryParse(parts[0].Trim(), out int row) &&
                 int.TryParse(parts[1].Trim(), out int col) &&
@@ -86,7 +84,7 @@ namespace Tic_Tac_Toe_Games
                 }
                 else
                 {
-                    Console.WriteLine("Invalid move. Make sure to enter the row and column as numbers separated like ---> ('1,2') .");
+                    Console.WriteLine("Invalid move. Try again.");
                 }
             }
 
