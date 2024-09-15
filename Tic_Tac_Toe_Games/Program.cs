@@ -5,7 +5,8 @@ namespace Tic_Tac_teo_GPT
     internal class Program
     {
         private static char userSymbol;
-        public static char[,] grid = new char[GameElement.GRID_SIZE,GameElement.GRID_SIZE];
+        private const int GRID_SIZE = 3;
+        public static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
         static void Main(string[] args)
         {
             GameCodes.ResetGrid(grid);
