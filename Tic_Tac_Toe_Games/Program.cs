@@ -9,14 +9,14 @@ namespace Tic_Tac_teo_GPT
         public static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
         static void Main(string[] args)
         {
-            GameCodes.ResetGrid(grid);
+            GameCodes.ResetGameBoard(grid);
             userSymbol = UIGame.ChooseSymbol();
             GameCodes.ChosePlayerSymbols(userSymbol);
 
             while (true)
             {
                 UIGame.DisplayGrid(grid);
-                GameCodes.PlayerMove(grid);
+                GameCodes.PlacePlayerMove(grid);
 
                 Players winner = GameCodes.CheckWinner(grid);
                 if (winner != Players.None)
@@ -32,7 +32,7 @@ namespace Tic_Tac_teo_GPT
                     Console.WriteLine("It's a draw!");
                     break;
                 }
-                GameCodes.AIMove(grid);
+                GameCodes.PlaceAIMove(grid);
 
                 winner = GameCodes.CheckWinner(grid);
                 if (winner != Players.None)

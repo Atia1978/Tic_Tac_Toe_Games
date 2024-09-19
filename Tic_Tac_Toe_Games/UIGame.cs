@@ -39,8 +39,33 @@ namespace Tic_Tac_Toe_Games
                 }
             }
 
+        public static Cell GetPlayerMove(int gridSize)
+        {
+            Console.WriteLine("Please enter the row and column like ---> ('1,2') ");
+            while (true)
+            {
+                string input = Console.ReadLine();
+                string[] parts = input.Split(',');
 
-       
+                if (parts.Length == 2 &&
+                    int.TryParse(parts[0].Trim(), out int row) &&
+                    int.TryParse(parts[1].Trim(), out int col) &&
+                    row >= 0 && row < gridSize &&
+                    col >= 0 && col < gridSize)
+                {
+                    return new Cell(row, col);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid move. Make sure to enter the row and column as numbers separated by a comma like ---> ('1,2').");
+                }
+            }
+        }
+        public static void ShowMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+
     }
 
 }

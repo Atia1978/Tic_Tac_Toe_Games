@@ -15,7 +15,7 @@ namespace Tic_Tac_Toe_Games
         private static List<Cell> availableCells = new List<Cell>();
 
 
-        public static void ResetGrid(char[,] grid)
+        public static void ResetGameBoard(char[,] grid)
         {
             availableCells.Clear();
             for (int row = 0; row < GameElement.GRID_SIZE; row++)
@@ -34,7 +34,7 @@ namespace Tic_Tac_Toe_Games
         }
 
 
-        public static void AIMove(char[,] grid)
+        public static void PlaceAIMove(char[,] grid)
         {
             if (availableCells.Count > 0)
             {
@@ -52,9 +52,9 @@ namespace Tic_Tac_Toe_Games
             }
 
         }
-        public static void PlayerMove(char[,] grid)
+        public static void PlacePlayerMove(char[,] grid)
         {
-            Cell move = GetPlayerMove(GameElement.GRID_SIZE);
+            Cell move = UIGame.GetPlayerMove(GameElement.GRID_SIZE);
 
             if (grid[move.Row,move.Col] == GameElement.EMPTY_SYMBOL)
             {
@@ -63,52 +63,31 @@ namespace Tic_Tac_Toe_Games
             }
             else
             {
-                Console.WriteLine("This cell is already taken! Please choose another.");
-                PlayerMove(grid); 
+                UIGame.ShowMessage("This cell is already taken! Please choose another.");
+                PlacePlayerMove(grid); 
             }
         }
-        public static Cell GetPlayerMove(int gridSize)
-        {
-            Console.WriteLine("Please enter the row and column like ---> ('1,2') ");
-            while (true)
-            {
-                string input = Console.ReadLine();
-                string[] parts = input.Split(',');
-
-                if (parts.Length == 2 &&
-                    int.TryParse(parts[0].Trim(), out int row) &&
-                    int.TryParse(parts[1].Trim(), out int col) &&
-                    row >= 0 && row < gridSize &&
-                    col >= 0 && col < gridSize)
-                {
-                    return new Cell(row, col);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid move. Make sure to enter the row and column as numbers separated by a comma like ---> ('1,2').");
-                }
-            }
-        }
+        
         public static Players CheckWinner(char[,] grid)
         {
 
             for (winner = 0; winner < GameElement.GRID_SIZE; winner++)
             {
-                if (IsRowsWinning(grid, winner))
+                if (CheckRowForWin(grid, winner))
                 {
                     return (grid[winner, 0] == userSymbol) ? Players.User : Players.AI;
 
                 }
-                if (IsColumnWinning(grid, winner))
+                if (CheckColumnForWin(grid, winner))
                 {
                     return (grid[0, winner] == userSymbol) ? Players.User : Players.AI;
                 }
             }
-            if (IsDiagonalWinning(grid))
+            if (CheckMainDiagonalForWin(grid))
             {
                 return (grid[0, 0] == userSymbol) ? Players.User : Players.AI;
             }
-            if (IsRichtDiagonalWinning(grid))
+            if (CheckAntiDiagonalForWin(grid))
             {
 
                 return (grid[0, GameElement.GRID_SIZE - 1] == userSymbol) ? Players.User : Players.AI;
@@ -127,7 +106,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool IsRowsWinning(char[,] grid, int row)
+        public static bool CheckRowForWin(char[,] grid, int row)
         {
 
 
@@ -149,7 +128,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool IsColumnWinning(char[,] grid, int col)
+        public static bool CheckColumnForWin(char[,] grid, int col)
         {
             firstSymbol = grid[0, col];
 
@@ -168,7 +147,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool IsDiagonalWinning(char[,] grid)
+        public static bool CheckMainDiagonalForWin(char[,] grid)
         {
             firstSymbol = grid[0, 0];
             if (firstSymbol == GameElement.EMPTY_SYMBOL)
@@ -189,7 +168,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool IsRichtDiagonalWinning(char[,] grid)
+        public static bool CheckAntiDiagonalForWin(char[,] grid)
         {
             firstSymbol = grid[0, GameElement.GRID_SIZE - 1];
             if (firstSymbol == GameElement.EMPTY_SYMBOL)
