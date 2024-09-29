@@ -4,20 +4,33 @@ namespace Tic_Tac_teo_GPT
 {
     internal class Program
     {
-        private static char userSymbol;
+        private static char playSymbol;
         private const int GRID_SIZE = 3;
-        public static char[,] grid = new char[GRID_SIZE, GRID_SIZE];
+        public static char[,] grid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
         static void Main(string[] args)
         {
             GameCodes.ResetGameBoard(grid);
-            userSymbol = UIGame.ChooseSymbol();
-            GameCodes.ChosePlayerSymbols(userSymbol);
+            playSymbol = UIGame.ChooseSymbol();
+            GameCodes.ChosePlayerSymbols(playSymbol);
+            Cell playMove;
 
             while (true)
             {
                 UIGame.DisplayGrid(grid);
-                GameCodes.PlacePlayerMove(grid);
-
+                bool isValidMove = false;
+                while (!isValidMove)
+                {
+                    playMove = UIGame.GetPlayerMove(GameElement.GRID_SIZE);
+                    if (GameCodes.PlacePlayerMove(grid, playMove))
+                    {
+                        isValidMove = true;
+                    }
+                    else
+                    {
+                        UIGame.ShowMessage("This cell is already taken! Please choose another.");
+                    }
+                }
+            
                 Players winner = GameCodes.CheckWinner(grid);
                 if (winner != Players.None)
                 {
@@ -54,8 +67,6 @@ namespace Tic_Tac_teo_GPT
         }
     }
 
-        
-
 }
-    
+
 

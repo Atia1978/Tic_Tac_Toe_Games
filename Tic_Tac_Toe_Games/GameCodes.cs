@@ -52,19 +52,19 @@ namespace Tic_Tac_Toe_Games
             }
 
         }
-        public static void PlacePlayerMove(char[,] grid)
+        public static bool PlacePlayerMove(char[,] grid ,Cell move)
         {
-            Cell move = UIGame.GetPlayerMove(GameElement.GRID_SIZE);
 
             if (grid[move.Row,move.Col] == GameElement.EMPTY_SYMBOL)
             {
                 grid[move.Row,move.Col] = userSymbol;
                 availableCells.Remove(move);
+                return true;
             }
             else
             {
-                UIGame.ShowMessage("This cell is already taken! Please choose another.");
-                PlacePlayerMove(grid); 
+                
+                return false;
             }
         }
         
