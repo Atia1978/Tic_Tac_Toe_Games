@@ -61,6 +61,21 @@ namespace Tic_Tac_Toe_Games
                 }
             }
         }
+        public static void DisplayGameStatus(GameStatus status)
+        {
+            switch (status)
+            {
+                case GameStatus.PlayWins:
+                    UIGame.ShowMessage("Play wins!");
+                    break;
+                case GameStatus.AIWins:
+                    UIGame.ShowMessage("AT wins!");
+                    break;
+                case GameStatus.Draw:
+                    UIGame.ShowMessage("It's a draw!");
+                    break;
+            }
+        }
         public static void ShowMessage(string message)
         {
             Console.WriteLine(message);

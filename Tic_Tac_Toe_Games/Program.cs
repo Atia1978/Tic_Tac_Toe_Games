@@ -9,7 +9,7 @@ namespace Tic_Tac_teo_GPT
         public static char[,] grid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
         static void Main(string[] args)
         {
-            GameCodes.ResetGameBoard(grid);
+            grid = GameCodes.ResetGameBoard();
             playSymbol = UIGame.ChooseSymbol();
             GameCodes.ChosePlayerSymbols(playSymbol);
             Cell playMove;
@@ -30,41 +30,28 @@ namespace Tic_Tac_teo_GPT
                         UIGame.ShowMessage("This cell is already taken! Please choose another.");
                     }
                 }
-            
-                Players winner = GameCodes.CheckWinner(grid);
-                if (winner != Players.None)
+                GameStatus status = GameCodes.CheckGameOver(grid);
+                if (status != GameStatus.Continue)
                 {
                     UIGame.DisplayGrid(grid);
-                    Console.WriteLine($"{winner} wins!");
+                    UIGame.DisplayGameStatus(status);
                     break;
                 }
-
-                if (GameCodes.IsGridFull(grid))
+                if (!GameCodes.PlaceAIMove(grid))
                 {
-                    UIGame.DisplayGrid(grid);
-                    Console.WriteLine("It's a draw!");
+                    UIGame.ShowMessage("AI was unable to make a move.");
                     break;
                 }
-                GameCodes.PlaceAIMove(grid);
-
-                winner = GameCodes.CheckWinner(grid);
-                if (winner != Players.None)
+                status = GameCodes.CheckGameOver(grid);
+                if (status != GameStatus.Continue)
                 {
                     UIGame.DisplayGrid(grid);
-                    Console.WriteLine($"{winner} wins!");
-                    break;
-                }
-
-                if (GameCodes.IsGridFull(grid))
-                {
-                    UIGame.DisplayGrid(grid);
-                    Console.WriteLine("It's a draw!");
+                    UIGame.DisplayGameStatus(status);
                     break;
                 }
             }
-
-            Console.WriteLine("Game Over. Thanks for playing!");
         }
+        
     }
 
 }

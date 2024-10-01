@@ -15,17 +15,19 @@ namespace Tic_Tac_Toe_Games
         private static List<Cell> availableCells = new List<Cell>();
 
 
-        public static void ResetGameBoard(char[,] grid)
+        public static char[,] ResetGameBoard()
         {
+            char[,] newGrid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
             availableCells.Clear();
             for (int row = 0; row < GameElement.GRID_SIZE; row++)
             {
                 for (int col = 0; col < GameElement.GRID_SIZE; col++)
                 {
-                    grid[row, col] = GameElement.EMPTY_SYMBOL;
+                    newGrid[row, col] = GameElement.EMPTY_SYMBOL;
                     availableCells.Add(new Cell(row, col));
                 }
             }
+            return newGrid;
         }
         public static void ChosePlayerSymbols(char symbol)
         {
@@ -34,7 +36,7 @@ namespace Tic_Tac_Toe_Games
         }
 
 
-        public static void PlaceAIMove(char[,] grid)
+        public static bool PlaceAIMove(char[,] grid)
         {
             if (availableCells.Count > 0)
             {
@@ -44,13 +46,13 @@ namespace Tic_Tac_Toe_Games
                 if (grid[cell.Row,cell.Col] == GameElement.EMPTY_SYMBOL)
                 {
                 grid[cell.Row,cell.Col] = AiSymbol;
-
                 availableCells.RemoveAt(randomIndex);
 
+                    return true;
                 }
 
             }
-
+            return false;
         }
         public static bool PlacePlayerMove(char[,] grid ,Cell move)
         {
@@ -185,6 +187,24 @@ namespace Tic_Tac_Toe_Games
             }
             return true;
         }
+        public static GameStatus CheckGameOver(char[,] grid)
+        {
+           
+            if (IsGridFull(grid))
+            {
+                return GameStatus.Draw;
+            }
+
+           
+            Players winner = CheckWinner(grid);
+            if (winner != Players.None)
+            {
+                return winner == Players.User ? GameStatus.PlayWins : GameStatus.AIWins;
+            }
+
+            return GameStatus.Continue;  
+        }
+       
 
     }
 
