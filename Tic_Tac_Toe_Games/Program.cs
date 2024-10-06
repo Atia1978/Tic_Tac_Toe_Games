@@ -2,7 +2,7 @@
 
 namespace Tic_Tac_teo_GPT
 {
-    internal class Program
+    public class Program
     {
         private static char playSymbol;
         private const int GRID_SIZE = 3;
@@ -21,8 +21,10 @@ namespace Tic_Tac_teo_GPT
                 while (!isValidMove)
                 {
                     playMove = UIGame.GetPlayerMove(GameElement.GRID_SIZE);
-                    if (GameCodes.PlacePlayerMove(grid, playMove))
+                    char[,]newGrid = GameCodes.PlacePlayerMove(grid,playMove);
+                    if (newGrid!=grid)
                     {
+                        grid = newGrid;
                         isValidMove = true;
                     }
                     else

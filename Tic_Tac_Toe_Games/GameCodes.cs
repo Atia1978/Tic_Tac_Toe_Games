@@ -54,19 +54,19 @@ namespace Tic_Tac_Toe_Games
             }
             return false;
         }
-        public static bool PlacePlayerMove(char[,] grid ,Cell move)
+        public static char[,] PlacePlayerMove(char[,] grid ,Cell move)
         {
 
-            if (grid[move.Row,move.Col] == GameElement.EMPTY_SYMBOL)
+            char[,] updatedGrid = (char[,])grid.Clone();
+            if (updatedGrid[move.Row, move.Col] == GameElement.EMPTY_SYMBOL)
             {
-                grid[move.Row,move.Col] = userSymbol;
+                updatedGrid[move.Row, move.Col] = userSymbol;
                 availableCells.Remove(move);
-                return true;
+                return updatedGrid;
             }
             else
             {
-                
-                return false;
+                return grid;
             }
         }
         
@@ -197,12 +197,18 @@ namespace Tic_Tac_Toe_Games
 
            
             Players winner = CheckWinner(grid);
-            if (winner != Players.None)
+            
+            if (winner == Players.User)
             {
-                return winner == Players.User ? GameStatus.PlayWins : GameStatus.AIWins;
+                return GameStatus.PlayWins;
+            }
+            if (winner == Players.AI)
+            {
+                return GameStatus.AIWins;
             }
 
             return GameStatus.Continue;  
+
         }
        
 
