@@ -8,7 +8,7 @@ namespace Tic_Tac_Toe_Games
     {
         private static char userSymbol;
         
-      
+
         public static char ChooseSymbol()
         {
             while (true)

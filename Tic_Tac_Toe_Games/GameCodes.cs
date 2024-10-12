@@ -40,21 +40,30 @@ namespace Tic_Tac_Toe_Games
         {
             if (availableCells.Count > 0)
             {
-                int randomIndex = random.Next(availableCells.Count);
-
-                Cell cell = availableCells[randomIndex];
-                if (grid[cell.Row,cell.Col] == GameElement.EMPTY_SYMBOL)
+                while (availableCells.Count > 0)
                 {
-                grid[cell.Row,cell.Col] = AiSymbol;
-                availableCells.RemoveAt(randomIndex);
+                    int randomIndex = random.Next(availableCells.Count);
+                    Cell cell = availableCells[randomIndex];
 
-                    return true;
+                    if (grid[cell.Row, cell.Col] == GameElement.EMPTY_SYMBOL)
+                    {
+
+                        grid[cell.Row, cell.Col] = AiSymbol;
+
+                        availableCells.RemoveAt(randomIndex);
+
+                        return true;
+                    }
+                    else
+                    {
+                        availableCells.RemoveAt(randomIndex);
+                    }
                 }
-
             }
             return false;
         }
-        public static char[,] PlacePlayerMove(char[,] grid ,Cell move)
+
+        public static char[,] PlacePlayerMove(char[,] grid, Cell move)
         {
 
             char[,] updatedGrid = (char[,])grid.Clone();
@@ -69,7 +78,7 @@ namespace Tic_Tac_Toe_Games
                 return grid;
             }
         }
-        
+
         public static Players CheckWinner(char[,] grid)
         {
 
@@ -103,7 +112,7 @@ namespace Tic_Tac_Toe_Games
         {
             foreach (char cell in grid)
             {
-                if (cell ==GameElement.EMPTY_SYMBOL) return false;
+                if (cell == GameElement.EMPTY_SYMBOL) return false;
             }
             return true;
         }
@@ -189,15 +198,14 @@ namespace Tic_Tac_Toe_Games
         }
         public static GameStatus CheckGameOver(char[,] grid)
         {
-           
+
             if (IsGridFull(grid))
             {
                 return GameStatus.Draw;
             }
 
-           
             Players winner = CheckWinner(grid);
-            
+
             if (winner == Players.User)
             {
                 return GameStatus.PlayWins;
@@ -207,13 +215,10 @@ namespace Tic_Tac_Toe_Games
                 return GameStatus.AIWins;
             }
 
-            return GameStatus.Continue;  
-
+            return GameStatus.Continue;
         }
-       
 
     }
-
 
 }
 
