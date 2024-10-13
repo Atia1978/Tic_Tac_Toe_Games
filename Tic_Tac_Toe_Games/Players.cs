@@ -1,6 +1,4 @@
-﻿
-
-namespace Tic_Tac_Toe_Games
+﻿namespace Tic_Tac_Toe_Games
 {
 
     public  enum Players

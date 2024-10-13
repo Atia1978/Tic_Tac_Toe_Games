@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace Tic_Tac_Toe_Games
+﻿namespace Tic_Tac_Toe_Games
 {
     public class UIGame
     {

@@ -3,12 +3,11 @@
 namespace Tic_Tac_teo_GPT
 {
     public class Program
-    {
-        private static char playSymbol;
-        private const int GRID_SIZE = 3;
-        public static char[,] grid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
+    {  
         static void Main(string[] args)
         {
+            char playSymbol;
+            char[,] grid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
             grid = GameCodes.ResetGameBoard();
             playSymbol = UIGame.ChooseSymbol();
             GameCodes.ChosePlayerSymbols(playSymbol);
