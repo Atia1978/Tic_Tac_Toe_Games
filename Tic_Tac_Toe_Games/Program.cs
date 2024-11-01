@@ -6,10 +6,11 @@ namespace Tic_Tac_teo_GPT
     {
         static void Main(string[] args)
         {
-
+            char userSymbol;
+            char aisSymbol;
             char[,] grid = GameCodes.ResetGameBoard();
             char playSymbol = UIGame.ChooseSymbol();
-            GameCodes.AssignPlayerSymbols(playSymbol);
+            GameCodes.AssignPlayerSymbols(playSymbol,out userSymbol, out aisSymbol);
             Cell playMove;
 
             while (true)
@@ -19,7 +20,7 @@ namespace Tic_Tac_teo_GPT
                 while (!isValidMove)
                 {
                     playMove = UIGame.GetPlayerMove(GameConstants.GRID_SIZE);
-                    char[,] newGrid = GameCodes.PlacePlayerMove(grid, playMove);
+                    char[,] newGrid = GameCodes.PlacePlayerMove(grid, playMove,userSymbol);
 
                     if (newGrid != grid)
 
@@ -33,7 +34,7 @@ namespace Tic_Tac_teo_GPT
                     }
                 }
 
-                GameStatus status = GameCodes.CheckGameOver(grid);
+                GameStatus status = GameCodes.CheckGameOver(grid,userSymbol);
 
                 if (status != GameStatus.Continue)
                 {
@@ -42,13 +43,13 @@ namespace Tic_Tac_teo_GPT
                     break;
                 }
 
-                if (!GameCodes.PlaceAIMove(grid))
+                if (!GameCodes.PlaceAIMove(grid, aisSymbol))
                 {
                     UIGame.PrintAIMoveError();
                     break;
                 }
 
-                status = GameCodes.CheckGameOver(grid);
+                status = GameCodes.CheckGameOver(grid, userSymbol);
 
                 if (status != GameStatus.Continue)
                 {

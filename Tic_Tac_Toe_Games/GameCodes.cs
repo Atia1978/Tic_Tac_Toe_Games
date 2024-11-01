@@ -7,11 +7,7 @@ namespace Tic_Tac_Toe_Games
     public static class GameCodes
     {
 
-        private static char userSymbol;
-        private static char AiSymbol;
-        private static char firstSymbol;
         private static Random random = new Random();
-        private static int winner;
         private static List<Cell> availableCells = new List<Cell>();
 
 
@@ -29,14 +25,14 @@ namespace Tic_Tac_Toe_Games
             }
             return newGrid;
         }
-        public static void AssignPlayerSymbols(char symbol)
+        public static void AssignPlayerSymbols(char symbol,out char userSymbol,out char aiSymbol)
         {
             userSymbol = symbol;
-            AiSymbol = (symbol == GameConstants.X_PLAYER) ? GameConstants.O_PLAYER : GameConstants.X_PLAYER;
+            aiSymbol = (symbol == GameConstants.X_PLAYER) ? GameConstants.O_PLAYER : GameConstants.X_PLAYER;
         }
 
 
-        public static bool PlaceAIMove(char[,] grid)
+        public static bool PlaceAIMove(char[,] grid, char aiSymbol)
         {
             if (availableCells.Count <= 0)
             {
@@ -46,12 +42,12 @@ namespace Tic_Tac_Toe_Games
             while (availableCells.Count > 0)
             {
                 int randomIndex = random.Next(availableCells.Count);
-                Cell aiMove = availableCells[randomIndex];
+                Cell cell = availableCells[randomIndex];
 
-                if (grid[aiMove.Row, aiMove.Col] == GameConstants.EMPTY_SYMBOL)
+                if (grid[cell.Row, cell.Col] == GameConstants.EMPTY_SYMBOL)
                 {
 
-                    grid[aiMove.Row, aiMove.Col] = AiSymbol;
+                    grid[cell.Row, cell.Col] = aiSymbol;
 
                     availableCells.RemoveAt(randomIndex);
 
@@ -66,7 +62,7 @@ namespace Tic_Tac_Toe_Games
         }
 
 
-        public static char[,] PlacePlayerMove(char[,] grid, Cell move)
+        public static char[,] PlacePlayerMove(char[,] grid, Cell move,char userSymbol)
         {
 
             char[,] updatedGrid = (char[,])grid.Clone();
@@ -82,26 +78,26 @@ namespace Tic_Tac_Toe_Games
             }
         }
 
-        public static Players CheckWinner(char[,] grid)
+        public static Players CheckWinner(char[,] grid,char userSymbol)
         {
 
-            for (winner = 0; winner < GameConstants.GRID_SIZE; winner++)
+            for (int i = 0; i < GameConstants.GRID_SIZE; i++)
             {
-                if (CheckRowForWin(grid, winner))
+                if (CheckRowForWin(grid, i, userSymbol))
                 {
-                    return (grid[winner, 0] == userSymbol) ? Players.User : Players.AI;
+                    return (grid[i, 0] == userSymbol) ? Players.User : Players.AI;
 
                 }
-                if (CheckColumnForWin(grid, winner))
+                if (CheckColumnForWin(grid, i, userSymbol))
                 {
-                    return (grid[0, winner] == userSymbol) ? Players.User : Players.AI;
+                    return (grid[0, i] == userSymbol) ? Players.User : Players.AI;
                 }
             }
-            if (CheckMainDiagonalForWin(grid))
+            if (CheckMainDiagonalForWin(grid, userSymbol))
             {
                 return (grid[0, 0] == userSymbol) ? Players.User : Players.AI;
             }
-            if (CheckAntiDiagonalForWin(grid))
+            if (CheckAntiDiagonalForWin(grid, userSymbol))
             {
 
                 return (grid[0, GameConstants.GRID_SIZE - 1] == userSymbol) ? Players.User : Players.AI;
@@ -120,7 +116,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool CheckRowForWin(char[,] grid, int row)
+        public static bool CheckRowForWin(char[,] grid, int row, char firstSymbol)
         {
             firstSymbol = grid[row, 0];
             if (firstSymbol == GameConstants.EMPTY_SYMBOL)
@@ -140,7 +136,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool CheckColumnForWin(char[,] grid, int col)
+        public static bool CheckColumnForWin(char[,] grid, int col, char firstSymbol)
         {
             firstSymbol = grid[0, col];
 
@@ -159,7 +155,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool CheckMainDiagonalForWin(char[,] grid)
+        public static bool CheckMainDiagonalForWin(char[,] grid, char firstSymbol)
         {
             firstSymbol = grid[0, 0];
             if (firstSymbol == GameConstants.EMPTY_SYMBOL)
@@ -180,7 +176,7 @@ namespace Tic_Tac_Toe_Games
             return true;
         }
 
-        public static bool CheckAntiDiagonalForWin(char[,] grid)
+        public static bool CheckAntiDiagonalForWin(char[,] grid, char firstSymbol)
         {
             firstSymbol = grid[0, GameConstants.GRID_SIZE - 1];
             if (firstSymbol == GameConstants.EMPTY_SYMBOL)
@@ -197,7 +193,7 @@ namespace Tic_Tac_Toe_Games
             }
             return true;
         }
-        public static GameStatus CheckGameOver(char[,] grid)
+        public static GameStatus CheckGameOver(char[,] grid, char userSymbol)
         {
 
             if (IsGridFull(grid))
@@ -205,7 +201,7 @@ namespace Tic_Tac_Toe_Games
                 return GameStatus.Draw;
             }
 
-            Players winner = CheckWinner(grid);
+            Players winner = CheckWinner(grid,userSymbol);
 
             if (winner == Players.User)
             {
