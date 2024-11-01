@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tic_Tac_Toe_Games
 {
-    internal class GameElement
+    internal class GameConstants
     {
         public const char X_PLAYER = 'X';
         public const char O_PLAYER = 'O';

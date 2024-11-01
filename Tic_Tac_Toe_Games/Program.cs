@@ -3,14 +3,13 @@
 namespace Tic_Tac_teo_GPT
 {
     public class Program
-    {  
+    {
         static void Main(string[] args)
         {
-            char playSymbol;
-            char[,] grid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
-            grid = GameCodes.ResetGameBoard();
-            playSymbol = UIGame.ChooseSymbol();
-            GameCodes.ChosePlayerSymbols(playSymbol);
+
+            char[,] grid = GameCodes.ResetGameBoard();
+            char playSymbol = UIGame.ChooseSymbol();
+            GameCodes.AssignPlayerSymbols(playSymbol);
             Cell playMove;
 
             while (true)
@@ -19,31 +18,38 @@ namespace Tic_Tac_teo_GPT
                 bool isValidMove = false;
                 while (!isValidMove)
                 {
-                    playMove = UIGame.GetPlayerMove(GameElement.GRID_SIZE);
-                    char[,]newGrid = GameCodes.PlacePlayerMove(grid,playMove);
-                    if (newGrid!=grid)
+                    playMove = UIGame.GetPlayerMove(GameConstants.GRID_SIZE);
+                    char[,] newGrid = GameCodes.PlacePlayerMove(grid, playMove);
+
+                    if (newGrid != grid)
+
                     {
                         grid = newGrid;
                         isValidMove = true;
                     }
                     else
                     {
-                        UIGame.ShowMessage("This cell is already taken! Please choose another.");
+                        UIGame.PrintInvalidCell();
                     }
                 }
+
                 GameStatus status = GameCodes.CheckGameOver(grid);
+
                 if (status != GameStatus.Continue)
                 {
                     UIGame.DisplayGrid(grid);
                     UIGame.DisplayGameStatus(status);
                     break;
                 }
+
                 if (!GameCodes.PlaceAIMove(grid))
                 {
-                    UIGame.ShowMessage("AI was unable to make a move.");
+                    UIGame.PrintAIMoveError();
                     break;
                 }
+
                 status = GameCodes.CheckGameOver(grid);
+
                 if (status != GameStatus.Continue)
                 {
                     UIGame.DisplayGrid(grid);
@@ -52,7 +58,7 @@ namespace Tic_Tac_teo_GPT
                 }
             }
         }
-        
+
     }
 
 }

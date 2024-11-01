@@ -17,57 +17,60 @@ namespace Tic_Tac_Toe_Games
 
         public static char[,] ResetGameBoard()
         {
-            char[,] newGrid = new char[GameElement.GRID_SIZE, GameElement.GRID_SIZE];
+            char[,] newGrid = new char[GameConstants.GRID_SIZE, GameConstants.GRID_SIZE];
             availableCells.Clear();
-            for (int row = 0; row < GameElement.GRID_SIZE; row++)
+            for (int row = 0; row < GameConstants.GRID_SIZE; row++)
             {
-                for (int col = 0; col < GameElement.GRID_SIZE; col++)
+                for (int col = 0; col < GameConstants.GRID_SIZE; col++)
                 {
-                    newGrid[row, col] = GameElement.EMPTY_SYMBOL;
+                    newGrid[row, col] = GameConstants.EMPTY_SYMBOL;
                     availableCells.Add(new Cell(row, col));
                 }
             }
             return newGrid;
         }
-        public static void ChosePlayerSymbols(char symbol)
+        public static void AssignPlayerSymbols(char symbol)
         {
             userSymbol = symbol;
-            AiSymbol = (symbol == GameElement.X_PLAYER) ? GameElement.O_PLAYER : GameElement.X_PLAYER;
+            AiSymbol = (symbol == GameConstants.X_PLAYER) ? GameConstants.O_PLAYER : GameConstants.X_PLAYER;
         }
 
 
         public static bool PlaceAIMove(char[,] grid)
         {
-            if (availableCells.Count > 0)
+            if (availableCells.Count <= 0)
             {
-                while (availableCells.Count > 0)
+                return false;
+            }
+
+            while (availableCells.Count > 0)
+            {
+                int randomIndex = random.Next(availableCells.Count);
+                Cell aiMove = availableCells[randomIndex];
+
+                if (grid[aiMove.Row, aiMove.Col] == GameConstants.EMPTY_SYMBOL)
                 {
-                    int randomIndex = random.Next(availableCells.Count);
-                    Cell cell = availableCells[randomIndex];
 
-                    if (grid[cell.Row, cell.Col] == GameElement.EMPTY_SYMBOL)
-                    {
+                    grid[aiMove.Row, aiMove.Col] = AiSymbol;
 
-                        grid[cell.Row, cell.Col] = AiSymbol;
+                    availableCells.RemoveAt(randomIndex);
 
-                        availableCells.RemoveAt(randomIndex);
-
-                        return true;
-                    }
-                    else
-                    {
-                        availableCells.RemoveAt(randomIndex);
-                    }
+                    return true;
+                }
+                else
+                {
+                    availableCells.RemoveAt(randomIndex);
                 }
             }
             return false;
         }
 
+
         public static char[,] PlacePlayerMove(char[,] grid, Cell move)
         {
 
             char[,] updatedGrid = (char[,])grid.Clone();
-            if (updatedGrid[move.Row, move.Col] == GameElement.EMPTY_SYMBOL)
+            if (updatedGrid[move.Row, move.Col] == GameConstants.EMPTY_SYMBOL)
             {
                 updatedGrid[move.Row, move.Col] = userSymbol;
                 availableCells.Remove(move);
@@ -82,7 +85,7 @@ namespace Tic_Tac_Toe_Games
         public static Players CheckWinner(char[,] grid)
         {
 
-            for (winner = 0; winner < GameElement.GRID_SIZE; winner++)
+            for (winner = 0; winner < GameConstants.GRID_SIZE; winner++)
             {
                 if (CheckRowForWin(grid, winner))
                 {
@@ -101,7 +104,7 @@ namespace Tic_Tac_Toe_Games
             if (CheckAntiDiagonalForWin(grid))
             {
 
-                return (grid[0, GameElement.GRID_SIZE - 1] == userSymbol) ? Players.User : Players.AI;
+                return (grid[0, GameConstants.GRID_SIZE - 1] == userSymbol) ? Players.User : Players.AI;
 
             }
 
@@ -112,21 +115,19 @@ namespace Tic_Tac_Toe_Games
         {
             foreach (char cell in grid)
             {
-                if (cell == GameElement.EMPTY_SYMBOL) return false;
+                if (cell == GameConstants.EMPTY_SYMBOL) return false;
             }
             return true;
         }
 
         public static bool CheckRowForWin(char[,] grid, int row)
         {
-
-
             firstSymbol = grid[row, 0];
-            if (firstSymbol == GameElement.EMPTY_SYMBOL)
+            if (firstSymbol == GameConstants.EMPTY_SYMBOL)
             {
                 return false;
             }
-            for (int col = 1; col < GameElement.GRID_SIZE; col++)
+            for (int col = 1; col < GameConstants.GRID_SIZE; col++)
             {
                 if (grid[row, col] != firstSymbol)
                 {
@@ -143,12 +144,12 @@ namespace Tic_Tac_Toe_Games
         {
             firstSymbol = grid[0, col];
 
-            if (firstSymbol == GameElement.EMPTY_SYMBOL)
+            if (firstSymbol == GameConstants.EMPTY_SYMBOL)
             {
                 return false;
             }
 
-            for (int row = 1; row < GameElement.GRID_SIZE; row++)
+            for (int row = 1; row < GameConstants.GRID_SIZE; row++)
             {
                 if (grid[row, col] != firstSymbol)
                 {
@@ -161,12 +162,12 @@ namespace Tic_Tac_Toe_Games
         public static bool CheckMainDiagonalForWin(char[,] grid)
         {
             firstSymbol = grid[0, 0];
-            if (firstSymbol == GameElement.EMPTY_SYMBOL)
+            if (firstSymbol == GameConstants.EMPTY_SYMBOL)
             {
                 return false;
             }
 
-            for (int i = 1; i < GameElement.GRID_SIZE; i++)
+            for (int i = 1; i < GameConstants.GRID_SIZE; i++)
 
             {
                 if (grid[i, i] != firstSymbol)
@@ -181,14 +182,14 @@ namespace Tic_Tac_Toe_Games
 
         public static bool CheckAntiDiagonalForWin(char[,] grid)
         {
-            firstSymbol = grid[0, GameElement.GRID_SIZE - 1];
-            if (firstSymbol == GameElement.EMPTY_SYMBOL)
+            firstSymbol = grid[0, GameConstants.GRID_SIZE - 1];
+            if (firstSymbol == GameConstants.EMPTY_SYMBOL)
             {
                 return false;
             }
-            for (int i = 1; i < GameElement.GRID_SIZE; i++)
+            for (int i = 1; i < GameConstants.GRID_SIZE; i++)
             {
-                if (grid[i, GameElement.GRID_SIZE - 1 - i] != firstSymbol)
+                if (grid[i, GameConstants.GRID_SIZE - 1 - i] != firstSymbol)
                 {
                     return false;
                 }

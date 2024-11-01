@@ -9,20 +9,20 @@
         {
             while (true)
             {
-                Console.WriteLine($"Choose your symbol {GameElement.X_PLAYER} OR {GameElement.O_PLAYER} : ");
+                Console.WriteLine($"Choose your symbol {GameConstants.X_PLAYER} OR {GameConstants.O_PLAYER} : ");
                 userSymbol = char.ToUpper(Console.ReadLine()[0]);
-                if (userSymbol ==GameElement.X_PLAYER || userSymbol ==GameElement.O_PLAYER)
+                if (userSymbol ==GameConstants.X_PLAYER || userSymbol ==GameConstants.O_PLAYER)
                 {
                     return userSymbol;
 
                 }
-                Console.WriteLine($"Invalid symbol. Please choose {GameElement.X_PLAYER} OR {GameElement.O_PLAYER}");
+                Console.WriteLine($"Invalid symbol. Please choose {GameConstants.X_PLAYER} OR {GameConstants.O_PLAYER}");
             }
             
         }
             public static void DisplayGrid(char[,] grid)
             {
-                int gridSize = grid.GetLength(0);
+                int gridSize = GameConstants.GRID_SIZE;
                 for (int row = 0; row < gridSize; row++)
                 {
                     for (int col = 0; col < gridSize; col++)
@@ -62,19 +62,24 @@
             switch (status)
             {
                 case GameStatus.PlayWins:
-                    UIGame.ShowMessage("Play wins!");
+                   Console.WriteLine("Play wins!");
                     break;
                 case GameStatus.AIWins:
-                    UIGame.ShowMessage("AT wins!");
+                    Console.WriteLine("AT wins!");
                     break;
                 case GameStatus.Draw:
-                    UIGame.ShowMessage("It's a draw!");
+                    Console.WriteLine("It's a draw!");
                     break;
             }
         }
-        public static void ShowMessage(string message)
+        public static void PrintInvalidCell()
         {
-            Console.WriteLine(message);
+            Console.WriteLine("This cell is already taken! Please choose another.");
+        }
+
+        public static void PrintAIMoveError()
+        {
+            Console.WriteLine("AI was unable to make a move.");
         }
 
     }
